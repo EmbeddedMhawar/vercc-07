@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Menu, Clock, AlertCircle, FileX, ArrowRight } from 'lucide-react';
-import logo from '../assets/verifiedcc-logo.png';
+import { useState, useEffect } from "react";
+import { Menu, Clock, AlertCircle, FileX, ArrowRight } from "lucide-react";
 
 export default function LandingPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -8,7 +7,7 @@ export default function LandingPage() {
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.pageYOffset;
-      const parallax = document.querySelectorAll('.sun-3d, .leaf-3d');
+      const parallax = document.querySelectorAll(".sun-3d, .leaf-3d");
       const speed = 0.3;
 
       parallax.forEach((element) => {
@@ -17,29 +16,30 @@ export default function LandingPage() {
       });
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
     const observerOptions = {
       threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px',
+      rootMargin: "0px 0px -50px 0px",
     };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          (entry.target as HTMLElement).style.opacity = '1';
-          (entry.target as HTMLElement).style.transform = 'translateY(0)';
+          (entry.target as HTMLElement).style.opacity = "1";
+          (entry.target as HTMLElement).style.transform = "translateY(0)";
         }
       });
     }, observerOptions);
 
-    document.querySelectorAll('.card-3d, .animate-fade-in').forEach((el) => {
-      (el as HTMLElement).style.opacity = '0';
-      (el as HTMLElement).style.transform = 'translateY(30px)';
-      (el as HTMLElement).style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    document.querySelectorAll(".card-3d, .animate-fade-in").forEach((el) => {
+      (el as HTMLElement).style.opacity = "0";
+      (el as HTMLElement).style.transform = "translateY(30px)";
+      (el as HTMLElement).style.transition =
+        "opacity 0.6s ease, transform 0.6s ease";
       observer.observe(el);
     });
 
@@ -51,16 +51,29 @@ export default function LandingPage() {
       <header className="bg-cloud-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 border-b border-gray-200">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <a href="#">
-            <img src={logo} alt="VerifiedCC Logo" className="h-12 w-auto" />
+            <img
+              src="/verifiedcc-logo.png"
+              alt="VerifiedCC Logo"
+              className="h-12 w-auto"
+            />
           </a>
           <nav className="hidden md:flex space-x-8">
-            <a href="#problem" className="text-gray-600 hover:text-oasis-green transition-colors">
+            <a
+              href="#problem"
+              className="text-gray-600 hover:text-oasis-green transition-colors"
+            >
               The Problem
             </a>
-            <a href="#solution" className="text-gray-600 hover:text-oasis-green transition-colors">
+            <a
+              href="#solution"
+              className="text-gray-600 hover:text-oasis-green transition-colors"
+            >
               How It Works
             </a>
-            <a href="#value" className="text-gray-600 hover:text-oasis-green transition-colors">
+            <a
+              href="#value"
+              className="text-gray-600 hover:text-oasis-green transition-colors"
+            >
               Our Value
             </a>
           </nav>
@@ -80,13 +93,22 @@ export default function LandingPage() {
         </div>
         {isMobileMenuOpen && (
           <div className="md:hidden px-6 pb-4 bg-cloud-white">
-            <a href="#problem" className="block py-2 text-gray-600 hover:text-oasis-green">
+            <a
+              href="#problem"
+              className="block py-2 text-gray-600 hover:text-oasis-green"
+            >
               The Problem
             </a>
-            <a href="#solution" className="block py-2 text-gray-600 hover:text-oasis-green">
+            <a
+              href="#solution"
+              className="block py-2 text-gray-600 hover:text-oasis-green"
+            >
               How It Works
             </a>
-            <a href="#value" className="block py-2 text-gray-600 hover:text-oasis-green">
+            <a
+              href="#value"
+              className="block py-2 text-gray-600 hover:text-oasis-green"
+            >
               Our Value
             </a>
             <a
@@ -107,12 +129,14 @@ export default function LandingPage() {
                 Built for the Hedera Africa Hackathon 2025
               </p>
               <h2 className="text-4xl md:text-6xl font-extrabold text-deep-ocean leading-tight mb-6">
-                The Green Energy Economy Has a{' '}
-                <span className="text-desert-sand">Multi-Billion Dollar</span> Trust Problem.
+                The Green Energy Economy Has a{" "}
+                <span className="text-desert-sand">Multi-Billion Dollar</span>{" "}
+                Trust Problem.
               </h2>
               <p className="max-w-3xl mx-auto text-lg md:text-xl text-gray-600 mb-10">
-                Introducing VerifiedCC, our "Trust as a Service" platform making it possible for
-                Independent Power Producers to unlock the true financial value of their clean energy.
+                Introducing VerifiedCC, our "Trust as a Service" platform making
+                it possible for Independent Power Producers to unlock the true
+                financial value of their clean energy.
               </p>
               <a
                 href="#solution"
@@ -124,28 +148,28 @@ export default function LandingPage() {
 
             <div
               className="sun-3d top-20 left-10 opacity-60"
-              style={{ animationDelay: '-2s' }}
+              style={{ animationDelay: "-2s" }}
             ></div>
             <div
               className="leaf-3d top-40 right-20 opacity-50"
-              style={{ animationDelay: '-4s', animationDuration: '6s' }}
+              style={{ animationDelay: "-4s", animationDuration: "6s" }}
             ></div>
             <div
               className="sun-3d bottom-20 left-1/4 opacity-40"
               style={{
-                animationDelay: '-1s',
-                animationDuration: '5s',
-                width: '80px',
-                height: '80px',
+                animationDelay: "-1s",
+                animationDuration: "5s",
+                width: "80px",
+                height: "80px",
               }}
             ></div>
             <div
               className="leaf-3d bottom-32 right-1/3 opacity-45"
               style={{
-                animationDelay: '-3s',
-                animationDuration: '7s',
-                width: '60px',
-                height: '75px',
+                animationDelay: "-3s",
+                animationDuration: "7s",
+                width: "60px",
+                height: "75px",
               }}
             ></div>
           </div>
@@ -161,9 +185,10 @@ export default function LandingPage() {
                 The $10,000 Audit Bottleneck
               </h4>
               <p className="text-lg text-gray-600">
-                Currently, the process for verifying and selling carbon credits is slow, expensive,
-                and manual. This bottleneck prevents many renewable energy producers from accessing a
-                crucial revenue stream, hindering growth and impact.
+                Currently, the process for verifying and selling carbon credits
+                is slow, expensive, and manual. This bottleneck prevents many
+                renewable energy producers from accessing a crucial revenue
+                stream, hindering growth and impact.
               </p>
             </div>
             <div className="mt-16 grid md:grid-cols-3 gap-8 text-center">
@@ -171,15 +196,17 @@ export default function LandingPage() {
                 <div className="bg-desert-sand text-white rounded-full h-16 w-16 mx-auto flex items-center justify-center">
                   <Clock className="w-8 h-8" />
                 </div>
-                <h5 className="text-xl font-semibold mt-6 mb-2 text-deep-ocean">Painfully Slow</h5>
+                <h5 className="text-xl font-semibold mt-6 mb-2 text-deep-ocean">
+                  Painfully Slow
+                </h5>
                 <p className="text-gray-600">
-                  Manual verification processes can take months, delaying revenue and creating
-                  uncertainty.
+                  Manual verification processes can take months, delaying
+                  revenue and creating uncertainty.
                 </p>
               </div>
               <div
                 className="card-3d p-8 rounded-xl border border-gray-200 animate-fade-in"
-                style={{ animationDelay: '0.2s' }}
+                style={{ animationDelay: "0.2s" }}
               >
                 <div className="bg-oasis-green text-white rounded-full h-16 w-16 mx-auto flex items-center justify-center">
                   <AlertCircle className="w-8 h-8" />
@@ -188,21 +215,23 @@ export default function LandingPage() {
                   Prohibitively Expensive
                 </h5>
                 <p className="text-gray-600">
-                  Audits often cost upwards of $10,000, creating a high barrier to entry for smaller
-                  producers.
+                  Audits often cost upwards of $10,000, creating a high barrier
+                  to entry for smaller producers.
                 </p>
               </div>
               <div
                 className="card-3d p-8 rounded-xl border border-gray-200 animate-fade-in"
-                style={{ animationDelay: '0.4s' }}
+                style={{ animationDelay: "0.4s" }}
               >
                 <div className="bg-deep-ocean text-white rounded-full h-16 w-16 mx-auto flex items-center justify-center">
                   <FileX className="w-8 h-8" />
                 </div>
-                <h5 className="text-xl font-semibold mt-6 mb-2 text-deep-ocean">Prone to Error</h5>
+                <h5 className="text-xl font-semibold mt-6 mb-2 text-deep-ocean">
+                  Prone to Error
+                </h5>
                 <p className="text-gray-600">
-                  Manual data handling and verification are susceptible to human error and lack
-                  transparency.
+                  Manual data handling and verification are susceptible to human
+                  error and lack transparency.
                 </p>
               </div>
             </div>
@@ -230,8 +259,9 @@ export default function LandingPage() {
                       Connect & Record
                     </h5>
                     <p className="text-gray-600 text-center leading-relaxed">
-                      A lightweight software connector creates a permanent, tamper-proof record for
-                      every kilowatt-hour on the Hedera public ledger.
+                      A lightweight software connector creates a permanent,
+                      tamper-proof record for every kilowatt-hour on the Hedera
+                      public ledger.
                     </p>
                   </div>
                 </div>
@@ -249,8 +279,9 @@ export default function LandingPage() {
                       AI-Powered Verification
                     </h5>
                     <p className="text-gray-600 text-center leading-relaxed">
-                      Our AI agent leverages this foundation of verifiable truth to automate the
-                      entire verification process, eliminating manual audits.
+                      Our AI agent leverages this foundation of verifiable truth
+                      to automate the entire verification process, eliminating
+                      manual audits.
                     </p>
                   </div>
                 </div>
@@ -268,8 +299,9 @@ export default function LandingPage() {
                       Autonomous Trading
                     </h5>
                     <p className="text-gray-600 text-center leading-relaxed">
-                      The AI autonomously trades the resulting high-integrity carbon credits on the
-                      global market, maximizing revenue for our clients.
+                      The AI autonomously trades the resulting high-integrity
+                      carbon credits on the global market, maximizing revenue
+                      for our clients.
                     </p>
                   </div>
                 </div>
@@ -285,8 +317,9 @@ export default function LandingPage() {
                 From Manual Process to Revenue Machine
               </h3>
               <p className="max-w-2xl mx-auto text-lg text-gray-300 mb-8">
-                We turn a slow, $10,000 manual audit and sales process into a fast, automated revenue
-                stream, building the foundational trust layer for Africa's green revolution.
+                We turn a slow, $10,000 manual audit and sales process into a
+                fast, automated revenue stream, building the foundational trust
+                layer for Africa's green revolution.
               </p>
               <div className="flex flex-col md:flex-row justify-center items-center gap-4">
                 <a
@@ -309,10 +342,14 @@ export default function LandingPage() {
 
       <footer id="contact" className="bg-deep-ocean text-gray-300">
         <div className="container mx-auto px-6 py-12 text-center">
-          <img src={logo} alt="VerifiedCC Logo" className="h-10 w-auto mx-auto" />
+          <img
+            src="/verifiedcc-logo.png"
+            alt="VerifiedCC Logo"
+            className="h-10 w-auto mx-auto"
+          />
           <p className="mt-4 mb-6 max-w-md mx-auto">
-            Learn more about the future of energy verification and join us in building the trust
-            layer for Africa's green revolution.
+            Learn more about the future of energy verification and join us in
+            building the trust layer for Africa's green revolution.
           </p>
           <div className="flex justify-center flex-wrap gap-x-4 gap-y-2 mb-8">
             <a href="#" className="text-gray-400 hover:text-desert-sand">
@@ -328,7 +365,9 @@ export default function LandingPage() {
               #ESG
             </a>
           </div>
-          <p className="text-sm">&copy; 2025 VerifiedCC. All rights reserved.</p>
+          <p className="text-sm">
+            &copy; 2025 VerifiedCC. All rights reserved.
+          </p>
         </div>
       </footer>
     </div>
