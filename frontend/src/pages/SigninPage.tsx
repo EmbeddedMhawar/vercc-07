@@ -1,31 +1,89 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { LogIn, PlayCircle, UserPlus } from 'lucide-react';
-import Button from '../components/Button';
-import InteractiveGradientBackground from '../components/InteractiveGradientBackground';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { LogIn, PlayCircle, UserPlus } from "lucide-react";
+import { supabase } from "../lib/supabase";
+import { useAuth } from "../contexts/AuthContext";
+import InteractiveGradientBackground from "../components/InteractiveGradientBackground";
 
 export default function SigninPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { session } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
-  const [companyName, setCompanyName] = useState('');
-  const [contactPerson, setContactPerson] = useState('');
-  const [phone, setPhone] = useState('');
-  const [country, setCountry] = useState('');
-  const [projectType, setProjectType] = useState('');
-  const [expectedEmissions, setExpectedEmissions] = useState('');
-  const [projectDescription, setProjectDescription] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (session) {
+      navigate("/dashboard");
+    }
+  }, [session, navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate('/dashboard');
+    setLoading(true);
+    setError("");
+
+    try {
+      if (isSignUp) {
+        // Simple sign up
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+        });
+
+        if (error) throw error;
+
+        alert(
+          "Registration successful! Please check your email for verification."
+        );
+        setIsSignUp(false);
+      } else {
+        // Sign in
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (error) throw error;
+      }
+    } catch (error: any) {
+      setError(error.message || "An error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDemoLogin = () => {
-    setEmail('demo@verifiedcc.com');
-    setPassword('verifiedcc');
-    navigate('/dashboard');
+  const handleDemoLogin = async () => {
+    setLoading(true);
+    setError("");
+
+    try {
+      // Try to sign in with demo credentials
+      const { error } = await supabase.auth.signInWithPassword({
+        email: "demo@gmail.com",
+        password: "verifiedcc",
+      });
+
+      if (error) {
+        // If demo user doesn't exist, show helpful message
+        if (error.message.includes("Invalid login credentials")) {
+          setError(
+            "Demo user not found. Please create a demo user in your Supabase dashboard with email: demo@gmail.com and password: verifiedcc"
+          );
+        } else {
+          throw error;
+        }
+      }
+
+      // AuthContext will automatically redirect to dashboard
+    } catch (error: any) {
+      setError(error.message || "Demo login failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -35,19 +93,33 @@ export default function SigninPage() {
         <div className="max-w-md mx-auto">
           <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-gray-200/50 shadow-2xl">
             <div className="text-center mb-6">
-              <img src="/verifiedcc-logo.png" alt="VerifiedCC Logo" className="h-16 w-auto mx-auto mb-4" />
+              <img
+                src="/verifiedcc-logo.png"
+                alt="VerifiedCC Logo"
+                className="h-16 w-auto mx-auto mb-4"
+              />
               <h3 className="text-2xl font-bold text-deep-ocean">
-                {isSignUp ? 'Become Our Partner' : 'Become Our Partner'}
+                {isSignUp ? "Become Our Partner" : "Become Our Partner"}
               </h3>
               <p className="text-gray-600 mt-2">
-                {isSignUp ? 'Partner Registration' : 'Access Guardian Verifiable Credentials Portal'}
+                {isSignUp
+                  ? "Partner Registration"
+                  : "Access Guardian Verifiable Credentials Portal"}
               </p>
+              {error && (
+                <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
+                  {error}
+                </div>
+              )}
             </div>
 
             {!isSignUp ? (
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-deep-ocean mb-2">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-deep-ocean mb-2"
+                  >
                     Email Address
                   </label>
                   <input
@@ -62,7 +134,10 @@ export default function SigninPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="password" className="block text-sm font-medium text-deep-ocean mb-2">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-deep-ocean mb-2"
+                  >
                     Password
                   </label>
                   <input
@@ -75,151 +150,93 @@ export default function SigninPage() {
                     placeholder="••••••••"
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    Demo password: <code className="bg-gray-100 px-1 rounded">verifiedcc</code>
+                    Demo credentials:{" "}
+                    <code className="bg-gray-100 px-1 rounded">
+                      demo@gmail.com
+                    </code>{" "}
+                    /{" "}
+                    <code className="bg-gray-100 px-1 rounded">verifiedcc</code>
                   </p>
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-oasis-green to-desert-sand text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  disabled={loading}
+                  className="w-full bg-gradient-to-r from-oasis-green to-desert-sand text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 >
-                  <LogIn className="w-5 h-5 inline mr-2" />
-                  Access Dashboard
+                  {loading ? (
+                    <div className="flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                      Signing In...
+                    </div>
+                  ) : (
+                    <>
+                      <LogIn className="w-5 h-5 inline mr-2" />
+                      Access Dashboard
+                    </>
+                  )}
                 </button>
               </form>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="company_name" className="block text-sm font-medium text-deep-ocean mb-1">
-                      Company Name *
-                    </label>
-                    <input
-                      type="text"
-                      id="company_name"
-                      value={companyName}
-                      onChange={(e) => setCompanyName(e.target.value)}
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oasis-green focus:border-transparent transition-colors text-sm bg-white/50"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="contact_person" className="block text-sm font-medium text-deep-ocean mb-1">
-                      Contact Person *
-                    </label>
-                    <input
-                      type="text"
-                      id="contact_person"
-                      value={contactPerson}
-                      onChange={(e) => setContactPerson(e.target.value)}
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oasis-green focus:border-transparent transition-colors text-sm bg-white/50"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="signup_email" className="block text-sm font-medium text-deep-ocean mb-1">
-                      Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      id="signup_email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oasis-green focus:border-transparent transition-colors text-sm bg-white/50"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-deep-ocean mb-1">
-                      Phone
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oasis-green focus:border-transparent transition-colors text-sm bg-white/50"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="country" className="block text-sm font-medium text-deep-ocean mb-1">
-                      Country
-                    </label>
-                    <input
-                      type="text"
-                      id="country"
-                      value={country}
-                      onChange={(e) => setCountry(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oasis-green focus:border-transparent transition-colors text-sm bg-white/50"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="project_type" className="block text-sm font-medium text-deep-ocean mb-1">
-                      Project Type
-                    </label>
-                    <select
-                      id="project_type"
-                      value={projectType}
-                      onChange={(e) => setProjectType(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oasis-green focus:border-transparent transition-colors text-sm bg-white/50"
-                    >
-                      <option value="">Select type</option>
-                      <option value="Solar">Solar</option>
-                      <option value="Wind">Wind</option>
-                      <option value="Hydro">Hydro</option>
-                      <option value="Biomass">Biomass</option>
-                      <option value="Geothermal">Geothermal</option>
-                      <option value="Other">Other</option>
-                    </select>
-                  </div>
-                </div>
-
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label htmlFor="expected_emission_reductions" className="block text-sm font-medium text-deep-ocean mb-1">
-                    Expected Emission Reductions (tCO2/year)
+                  <label
+                    htmlFor="signup_email"
+                    className="block text-sm font-medium text-deep-ocean mb-2"
+                  >
+                    Email Address
                   </label>
                   <input
-                    type="number"
-                    id="expected_emission_reductions"
-                    value={expectedEmissions}
-                    onChange={(e) => setExpectedEmissions(e.target.value)}
-                    step="0.01"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oasis-green focus:border-transparent transition-colors text-sm bg-white/50"
+                    type="email"
+                    id="signup_email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oasis-green focus:border-transparent transition-colors bg-white/50"
+                    placeholder="partner@company.com"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="project_description" className="block text-sm font-medium text-deep-ocean mb-1">
-                    Project Description
+                  <label
+                    htmlFor="signup_password"
+                    className="block text-sm font-medium text-deep-ocean mb-2"
+                  >
+                    Password
                   </label>
-                  <textarea
-                    id="project_description"
-                    value={projectDescription}
-                    onChange={(e) => setProjectDescription(e.target.value)}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oasis-green focus:border-transparent transition-colors text-sm bg-white/50"
-                    placeholder="Brief description of your renewable energy project..."
+                  <input
+                    type="password"
+                    id="signup_password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oasis-green focus:border-transparent transition-colors bg-white/50"
+                    placeholder="••••••••"
                   />
                 </div>
 
                 <div className="flex gap-3">
                   <button
                     type="submit"
-                    className="flex-1 bg-oasis-green hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg text-sm"
+                    disabled={loading}
+                    className="flex-1 bg-oasis-green hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                   >
-                    <UserPlus className="w-4 h-4 inline mr-2" />
-                    Submit Application
+                    {loading ? (
+                      <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                        Creating Account...
+                      </div>
+                    ) : (
+                      <>
+                        <UserPlus className="w-5 h-5 inline mr-2" />
+                        Create Account
+                      </>
+                    )}
                   </button>
                   <button
                     type="button"
                     onClick={() => setIsSignUp(false)}
-                    className="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 text-sm"
+                    className="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300"
                   >
                     Cancel
                   </button>
@@ -241,23 +258,33 @@ export default function SigninPage() {
                 <button
                   type="button"
                   onClick={handleDemoLogin}
-                  className="w-full mt-4 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  disabled={loading}
+                  className="w-full mt-4 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 >
-                  <PlayCircle className="w-5 h-5 inline mr-2" />
-                  Try Demo Account
+                  {loading ? (
+                    <div className="flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                      Loading Demo...
+                    </div>
+                  ) : (
+                    <>
+                      <PlayCircle className="w-5 h-5 inline mr-2" />
+                      Try Demo Account
+                    </>
+                  )}
                 </button>
               </div>
             )}
 
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
-                {isSignUp ? 'Already have an account?' : 'New partner?'}{' '}
+                {isSignUp ? "Already have an account?" : "New partner?"}{" "}
                 <button
                   type="button"
                   onClick={() => setIsSignUp(!isSignUp)}
                   className="text-oasis-green hover:text-green-700 font-medium underline"
                 >
-                  {isSignUp ? 'Sign in here' : 'Sign up for partnership'}
+                  {isSignUp ? "Sign in here" : "Sign up for partnership"}
                 </button>
               </p>
             </div>
