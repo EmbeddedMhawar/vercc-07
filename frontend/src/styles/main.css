@@ -312,8 +312,9 @@ tive Gradient Background */
   100% {
     transform: translateX(-50%) translateY(-10%);
   }
-}/* Loadin
-g Screen Animations */
+}
+
+/* Loading Screen Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -335,4 +336,810 @@ g Screen Animations */
   100% {
     background-position: 0% 50%;
   }
+}
+
+/* Hero Interactive Background */
+.hero-interactive .gradients-container {
+  width: 100%;
+  height: 100%;
+}
+
+.hero-interactive .g1 {
+  top: 10%;
+  left: 10%;
+  animation: moveVertical 30s ease infinite;
+}
+
+.hero-interactive .g2 {
+  top: 10%;
+  right: 10%;
+  animation: moveInCircle 20s reverse infinite;
+  transform-origin: calc(50% - 400px);
+}
+
+.hero-interactive .g3 {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: moveInCircle 40s linear infinite;
+  transform-origin: calc(50% + 400px);
+}
+
+.hero-interactive .g4 {
+  top: 5%;
+  right: 33%;
+  animation: moveHorizontal 40s ease infinite;
+  transform-origin: calc(50% - 200px);
+}
+
+.hero-interactive .g5 {
+  bottom: 5%;
+  left: 33%;
+  animation: moveInCircle 20s ease infinite;
+  transform-origin: calc(50% - 800px) calc(50% + 200px);
+}
+
+.hero-interactive .interactive {
+  mix-blend-mode: hard-light;
+  opacity: 0.7;
+}
+
+/* Interactive Button Effect */
+.interactive-button {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Interactive Hero Section Effect */
+.interactive-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.interactive-hero .hero-bubble {
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle at center, rgba(46, 133, 64, 0.8) 0, rgba(46, 133, 64, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.15s ease-out;
+  filter: blur(15px);
+  mix-blend-mode: hard-light;
+}
+
+.interactive-hero:hover .hero-bubble {
+  opacity: 1;
+}/* 
+Signin Page Interactive Background */
+.signin-interactive {
+  position: fixed;
+  top: -100px;
+  left: -100px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle at center, rgba(46, 133, 64, 0.3) 0, rgba(46, 133, 64, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 100;
+  transition: transform 0.1s ease-out;
+  filter: blur(20px);
+  mix-blend-mode: hard-light;
+}
+
+/* Dashboard Interactive Background */
+.dashboard-interactive {
+  position: fixed;
+  top: -100px;
+  left: -100px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle at center, rgba(46, 133, 64, 0.3) 0, rgba(46, 133, 64, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 100;
+  transition: transform 0.1s ease-out;
+  filter: blur(20px);
+  mix-blend-mode: hard-light;
+}
+
+.dashboard-gradients {
+  filter: url(#goo-dashboard) blur(40px);
+}/* Button 
+Interactive Background */
+.button-gradient-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.button-gradients-container {
+  filter: url(#goo-button) blur(20px);
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.button-g1, .button-g2, .button-g3, .button-g4, .button-g5 {
+  position: absolute;
+  border-radius: 50%;
+  mix-blend-mode: hard-light;
+  opacity: 0.8;
+}
+
+.button-g1 {
+  background: radial-gradient(circle at center, rgba(253, 184, 19, 0.8) 0, rgba(253, 184, 19, 0) 70%);
+  width: 60%;
+  height: 60%;
+  top: calc(50% - 30%);
+  left: calc(50% - 30%);
+  animation: moveVertical 30s ease-in-out infinite;
+}
+
+.button-g2 {
+  background: radial-gradient(circle at center, rgba(46, 133, 64, 0.8) 0, rgba(46, 133, 64, 0) 70%);
+  width: 60%;
+  height: 60%;
+  top: calc(50% - 30%);
+  left: calc(50% - 30%);
+  animation: moveInCircle 20s reverse infinite;
+}
+
+.button-g3 {
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.4) 0, rgba(255, 255, 255, 0) 70%);
+  width: 60%;
+  height: 60%;
+  top: calc(40% - 30% + 20px);
+  left: calc(40% - 30% - 30px);
+  animation: moveInCircle 40s linear infinite;
+}
+
+.button-g4 {
+  background: radial-gradient(circle at center, rgba(253, 184, 19, 0.5) 0, rgba(253, 184, 19, 0) 70%);
+  width: 60%;
+  height: 60%;
+  top: calc(50% - 30%);
+  left: calc(50% - 30%);
+  animation: moveHorizontal 40s ease infinite;
+  opacity: 0.6;
+}
+
+.button-g5 {
+  background: radial-gradient(circle at center, rgba(46, 133, 64, 0.3) 0, rgba(46, 133, 64, 0) 70%);
+  width: calc(60% * 2);
+  height: calc(60% * 2);
+  top: calc(60% - 60%);
+  left: calc(55% - 60%);
+  animation: moveInCircle 20s ease infinite;
+}
+
+.button-interactive {
+  position: absolute;
+  top: -25px;
+  left: -25px;
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.1s ease-out;
+}
+
+.interactive-button:hover .button-interactive {
+  opacity: 1;
+}/* But
+ton Interactive Background - Fixed */
+.button-gradient-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+  z-index: 1;
+  background: linear-gradient(40deg, #FDB813, #2E8540);
+}
+
+.button-gradients-container {
+  filter: url(#goo-button) blur(15px);
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.button-g1, .button-g2, .button-g3, .button-g4, .button-g5 {
+  position: absolute;
+  border-radius: 50%;
+  mix-blend-mode: hard-light;
+  opacity: 0.8;
+}
+
+.button-g1 {
+  background: radial-gradient(circle at center, rgba(253, 184, 19, 0.8) 0, rgba(253, 184, 19, 0) 70%);
+  width: 80%;
+  height: 80%;
+  top: calc(50% - 40%);
+  left: calc(50% - 40%);
+  animation: moveVertical 30s ease-in-out infinite;
+  z-index: 1;
+}
+
+.button-g2 {
+  background: radial-gradient(circle at center, rgba(46, 133, 64, 0.8) 0, rgba(46, 133, 64, 0) 70%);
+  width: 80%;
+  height: 80%;
+  top: calc(50% - 40%);
+  left: calc(50% - 40%);
+  animation: moveInCircle 20s reverse infinite;
+  z-index: 2;
+}
+
+.button-g3 {
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.4) 0, rgba(255, 255, 255, 0) 70%);
+  width: 80%;
+  height: 80%;
+  top: calc(40% - 40% + 10px);
+  left: calc(40% - 40% - 15px);
+  animation: moveInCircle 40s linear infinite;
+  z-index: 3;
+}
+
+.button-g4 {
+  background: radial-gradient(circle at center, rgba(253, 184, 19, 0.5) 0, rgba(253, 184, 19, 0) 70%);
+  width: 80%;
+  height: 80%;
+  top: calc(50% - 40%);
+  left: calc(50% - 40%);
+  animation: moveHorizontal 40s ease infinite;
+  opacity: 0.6;
+  z-index: 4;
+}
+
+.button-g5 {
+  background: radial-gradient(circle at center, rgba(46, 133, 64, 0.3) 0, rgba(46, 133, 64, 0) 70%);
+  width: calc(80% * 1.5);
+  height: calc(80% * 1.5);
+  top: calc(60% - 60%);
+  left: calc(55% - 60%);
+  animation: moveInCircle 20s ease infinite;
+  z-index: 5;
+}
+
+.button-interactive {
+  position: absolute;
+  top: -25px;
+  left: -25px;
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.1s ease-out;
+  z-index: 100;
+}
+
+.interactive-button:hover .button-interactive {
+  opacity: 1;
+}
+
+/* Make sure button text is above everything */
+.interactive-button .relative {
+  z-index: 10;
+}
+
+/* BUTTON INTERACTIVE BACKGROUND - FINAL VERSION */
+.button-gradient-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+  z-index: 1;
+  background: linear-gradient(40deg, #FDB813, #2E8540);
+}
+
+.button-gradients-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.button-g1, .button-g2, .button-g3, .button-g4, .button-g5 {
+  position: absolute;
+  border-radius: 50%;
+  mix-blend-mode: hard-light;
+  opacity: 0.8;
+}
+
+.button-g1 {
+  background: radial-gradient(circle at center, rgba(253, 184, 19, 0.8) 0, rgba(253, 184, 19, 0) 70%);
+  width: 150%;
+  height: 150%;
+  top: calc(50% - 75%);
+  left: calc(50% - 75%);
+  transform-origin: center center;
+  animation: moveVertical 30s ease-in-out infinite;
+  z-index: 1;
+}
+
+.button-g2 {
+  background: radial-gradient(circle at center, rgba(46, 133, 64, 0.8) 0, rgba(46, 133, 64, 0) 70%);
+  width: 150%;
+  height: 150%;
+  top: calc(50% - 75%);
+  left: calc(50% - 75%);
+  transform-origin: calc(50% - 400px);
+  animation: moveInCircle 20s reverse infinite;
+  z-index: 2;
+}
+
+.button-g3 {
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.4) 0, rgba(255, 255, 255, 0) 70%);
+  width: 150%;
+  height: 150%;
+  top: calc(40% - 75% + 200px);
+  left: calc(40% - 75% - 300px);
+  transform-origin: calc(50% + 400px);
+  animation: moveInCircle 40s linear infinite;
+  z-index: 3;
+}
+
+.button-g4 {
+  background: radial-gradient(circle at center, rgba(253, 184, 19, 0.5) 0, rgba(253, 184, 19, 0) 70%);
+  width: 150%;
+  height: 150%;
+  top: calc(50% - 75%);
+  left: calc(50% - 75%);
+  transform-origin: calc(50% - 200px);
+  animation: moveHorizontal 40s ease infinite;
+  opacity: 0.6;
+  z-index: 4;
+}
+
+.button-g5 {
+  background: radial-gradient(circle at center, rgba(46, 133, 64, 0.3) 0, rgba(46, 133, 64, 0) 70%);
+  width: calc(150% * 2);
+  height: calc(150% * 2);
+  top: calc(60% - 150%);
+  left: calc(55% - 150%);
+  transform-origin: calc(50% - 800px) calc(50% + 200px);
+  animation: moveInCircle 20s ease infinite;
+  z-index: 5;
+}
+
+.button-interactive {
+  position: absolute;
+  top: -25px;
+  left: -25px;
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.1s ease-out;
+  z-index: 100;
+}
+
+.interactive-button:hover .button-interactive {
+  opacity: 1;
+}
+
+/* Make sure button text is above everything */
+.interactive-button .relative {
+  z-index: 10;
+}
+
+/* GREEN BLURRED BUTTON BUBBLE - FINAL */
+.interactive-button .button-interactive {
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  width: 30px;
+  height: 30px;
+  background: radial-gradient(circle at center, rgba(46, 133, 64, 0.8) 0, rgba(46, 133, 64, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.15s ease-out;
+  z-index: 100;
+  filter: blur(15px);
+  mix-blend-mode: hard-light;
+}
+
+.interactive-button:hover .button-interactive {
+  opacity: 1;
+}
+
+.interactive-button:active .button-interactive {
+  opacity: 0.6;
+}
+
+/* Interactive Element Component Styles */
+.interactive-element-small .interactive-gradient-container-small {
+  filter: blur(20px);
+}
+
+.interactive-element-large .interactive-gradient-container-large {
+  filter: blur(40px);
+}
+
+.interactive-g1-small, .interactive-g2-small, .interactive-g3-small, .interactive-g4-small, .interactive-g5-small {
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  mix-blend-mode: hard-light;
+  opacity: 0.8;
+}
+
+.interactive-g1-large, .interactive-g2-large, .interactive-g3-large, .interactive-g4-large, .interactive-g5-large {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  mix-blend-mode: hard-light;
+  opacity: 0.8;
+}
+
+.interactive-g1-small, .interactive-g1-large {
+  background: radial-gradient(circle at center, rgba(253, 184, 19, 0.8) 0%, rgba(253, 184, 19, 0) 70%);
+  animation: moveVertical 30s ease-in-out infinite;
+  top: 10%;
+  left: 10%;
+}
+
+.interactive-g2-small, .interactive-g2-large {
+  background: radial-gradient(circle at center, rgba(46, 133, 64, 0.8) 0%, rgba(46, 133, 64, 0) 70%);
+  animation: moveInCircle 20s reverse infinite;
+  top: 20%;
+  left: 20%;
+}
+
+.interactive-g3-small, .interactive-g3-large {
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 70%);
+  animation: moveInCircle 40s linear infinite;
+  top: 30%;
+  left: 30%;
+}
+
+.interactive-g4-small, .interactive-g4-large {
+  background: radial-gradient(circle at center, rgba(253, 184, 19, 0.5) 0%, rgba(253, 184, 19, 0) 70%);
+  animation: moveHorizontal 40s ease infinite;
+  top: 40%;
+  left: 40%;
+}
+
+.interactive-g5-small, .interactive-g5-large {
+  background: radial-gradient(circle at center, rgba(46, 133, 64, 0.3) 0%, rgba(46, 133, 64, 0) 70%);
+  animation: moveInCircle 20s ease infinite;
+  top: 50%;
+  left: 50%;
+}
+
+/* Full Interactive Background (like signin page) */
+.interactive-gradient-container-full {
+  filter: blur(40px);
+  width: 100%;
+  height: 100%;
+}
+
+.interactive-g1-full, .interactive-g2-full, .interactive-g3-full, .interactive-g4-full, .interactive-g5-full {
+  position: absolute;
+  border-radius: 50%;
+  mix-blend-mode: hard-light;
+  opacity: 0.8;
+}
+
+.interactive-g1-full {
+  background: radial-gradient(circle at center, rgba(253, 184, 19, 0.8) 0, rgba(253, 184, 19, 0) 70%);
+  width: 150%;
+  height: 150%;
+  top: calc(50% - 75%);
+  left: calc(50% - 75%);
+  transform-origin: center center;
+  animation: moveVertical 30s ease-in-out infinite;
+  z-index: 1;
+}
+
+.interactive-g2-full {
+  background: radial-gradient(circle at center, rgba(46, 133, 64, 0.8) 0, rgba(46, 133, 64, 0) 70%);
+  width: 150%;
+  height: 150%;
+  top: calc(50% - 75%);
+  left: calc(50% - 75%);
+  transform-origin: calc(50% - 400px);
+  animation: moveInCircle 20s reverse infinite;
+  z-index: 2;
+}
+
+.interactive-g3-full {
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.4) 0, rgba(255, 255, 255, 0) 70%);
+  width: 150%;
+  height: 150%;
+  top: calc(40% - 75% + 200px);
+  left: calc(40% - 75% - 300px);
+  transform-origin: calc(50% + 400px);
+  animation: moveInCircle 40s linear infinite;
+  z-index: 3;
+}
+
+.interactive-g4-full {
+  background: radial-gradient(circle at center, rgba(253, 184, 19, 0.5) 0, rgba(253, 184, 19, 0) 70%);
+  width: 150%;
+  height: 150%;
+  top: calc(50% - 75%);
+  left: calc(50% - 75%);
+  transform-origin: calc(50% - 200px);
+  animation: moveHorizontal 40s ease infinite;
+  opacity: 0.6;
+  z-index: 4;
+}
+
+.interactive-g5-full {
+  background: radial-gradient(circle at center, rgba(46, 133, 64, 0.3) 0, rgba(46, 133, 64, 0) 70%);
+  width: calc(150% * 2);
+  height: calc(150% * 2);
+  top: calc(60% - 150%);
+  left: calc(55% - 150%);
+  transform-origin: calc(50% - 800px) calc(50% + 200px);
+  animation: moveInCircle 20s ease infinite;
+  z-index: 5;
+}
+/* Modal Styles */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  position: relative;
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 42rem;
+  width: 100%;
+  margin: 1rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Action Cards */
+.action-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+}
+
+.action-card-button {
+  width: 100%;
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  transform: scale(1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.action-card-button:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.action-card-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.action-card-button.active {
+  background: #FDB813;
+  color: white;
+}
+
+.action-card-button.inactive {
+  background: #9ca3af;
+  color: white;
+}
+
+/* Specific button colors matching icons - Three State System */
+
+/* Document Button States (Deep Ocean Blue) */
+.action-card-button.active.document-button {
+  background: #003F5C; /* 100% opacity */
+  color: white;
+}
+
+.action-card-button.active.document-button:hover:not(:disabled) {
+  background: #002a3f;
+}
+
+.action-card-button.done.document-button {
+  background: rgba(0, 63, 92, 0.8); /* Match icon exactly */
+  color: white;
+}
+
+.action-card-button.done.document-button:hover:not(:disabled) {
+  background: rgba(0, 63, 92, 0.85);
+}
+
+.action-card-button.inactive.document-button {
+  background: #9ca3af; /* grey */
+  color: white;
+}
+
+/* Sensor Button States (Desert Sand Yellow) */
+.action-card-button.active.sensor-button {
+  background: #FDB813; /* 100% opacity */
+  color: white;
+}
+
+.action-card-button.active.sensor-button:hover:not(:disabled) {
+  background: #e6a50f;
+}
+
+.action-card-button.done.sensor-button {
+  background: rgba(253, 184, 19, 0.8); /* Match icon exactly */
+  color: white;
+}
+
+.action-card-button.done.sensor-button:hover:not(:disabled) {
+  background: rgba(253, 184, 19, 0.85);
+}
+
+.action-card-button.inactive.sensor-button {
+  background: #9ca3af; /* grey */
+  color: white;
+}
+
+/* Credit Button States (Oasis Green) */
+.action-card-button.active.credit-button {
+  background: #2E8540; /* 100% opacity */
+  color: white;
+}
+
+.action-card-button.active.credit-button:hover:not(:disabled) {
+  background: #246b34;
+}
+
+.action-card-button.done.credit-button {
+  background: rgba(46, 133, 64, 0.8); /* Match icon exactly */
+  color: white;
+}
+
+.action-card-button.done.credit-button:hover:not(:disabled) {
+  background: rgba(46, 133, 64, 0.85);
+}
+
+.action-card-button.inactive.credit-button {
+  background: #9ca3af; /* grey */
+  color: white;
+}
+
+/* Form Styles */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #003F5C;
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: #2E8540;
+  border-color: transparent;
+}
+
+.demo-button {
+  background: #6b7280;
+  color: white;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  transform: scale(1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.demo-button:hover {
+  background: #4b5563;
+  transform: scale(1.05);
+}
+
+.submit-button {
+  background: linear-gradient(to right, #2E8540, #FDB813);
+  color: white;
+  font-weight: bold;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  transform: scale(1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: none;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  filter: brightness(1.05);
+  transform: scale(1.05);
+}
+
+.cancel-button {
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  border-radius: 0.5rem;
+  background: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.cancel-button:hover {
+  background: #f9fafb;
 }

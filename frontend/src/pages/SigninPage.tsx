@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { LogIn, PlayCircle, UserPlus } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
-import InteractiveGradientBackground from "../components/InteractiveGradientBackground";
+import { InteractiveElement } from "../components/InteractiveElement";
 
 export default function SigninPage() {
   const navigate = useNavigate();
@@ -20,6 +20,41 @@ export default function SigninPage() {
       navigate("/dashboard");
     }
   }, [session, navigate]);
+
+  // Background interactive bubble
+  useEffect(() => {
+    const interBubble = document.querySelector(
+      ".signin-interactive"
+    ) as HTMLElement;
+
+    if (interBubble) {
+      let curX = 0;
+      let curY = 0;
+      let tgX = 0;
+      let tgY = 0;
+
+      function moveBg() {
+        curX += (tgX - curX) / 20;
+        curY += (tgY - curY) / 20;
+        interBubble.style.transform = `translate(${Math.round(
+          curX
+        )}px, ${Math.round(curY)}px)`;
+        requestAnimationFrame(moveBg);
+      }
+
+      const handleBgMouseMove = (event: MouseEvent) => {
+        tgX = event.clientX;
+        tgY = event.clientY;
+      };
+
+      window.addEventListener("mousemove", handleBgMouseMove);
+      moveBg();
+
+      return () => {
+        window.removeEventListener("mousemove", handleBgMouseMove);
+      };
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,8 +123,35 @@ export default function SigninPage() {
 
   return (
     <>
-      <InteractiveGradientBackground />
-      <main className="relative z-10 min-h-screen flex items-center justify-center p-6">
+      <div className="gradient-bg">
+        <svg xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="goo">
+              <feGaussianBlur
+                in="SourceGraphic"
+                stdDeviation="10"
+                result="blur"
+              />
+              <feColorMatrix
+                in="blur"
+                mode="matrix"
+                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8"
+                result="goo"
+              />
+              <feBlend in="SourceGraphic" in2="goo" />
+            </filter>
+          </defs>
+        </svg>
+        <div className="gradients-container">
+          <div className="g1"></div>
+          <div className="g2"></div>
+          <div className="g3"></div>
+          <div className="g4"></div>
+          <div className="g5"></div>
+          <div className="interactive signin-interactive"></div>
+        </div>
+      </div>
+      <main className="min-h-screen relative z-10 flex items-center justify-center p-6">
         <div className="max-w-md mx-auto">
           <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-gray-200/50 shadow-2xl">
             <div className="text-center mb-6">
@@ -159,23 +221,46 @@ export default function SigninPage() {
                   </p>
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-gradient-to-r from-oasis-green to-desert-sand text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                >
-                  {loading ? (
-                    <div className="flex items-center justify-center">
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                      Signing In...
-                    </div>
-                  ) : (
-                    <>
-                      <LogIn className="w-5 h-5 inline mr-2" />
-                      Access Dashboard
-                    </>
-                  )}
-                </button>
+                {email && password ? (
+                  <InteractiveElement
+                    as="button"
+                    size="small"
+                    backgroundStyle="full" // This gives it the full signin page background
+                    type="submit"
+                    disabled={loading}
+                    className="w-full text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  >
+                    {loading ? (
+                      <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                        Signing In...
+                      </div>
+                    ) : (
+                      <>
+                        <LogIn className="w-5 h-5 inline mr-2" />
+                        Access Dashboard
+                      </>
+                    )}
+                  </InteractiveElement>
+                ) : (
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none bg-gray-400"
+                  >
+                    {loading ? (
+                      <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                        Signing In...
+                      </div>
+                    ) : (
+                      <>
+                        <LogIn className="w-5 h-5 inline mr-2" />
+                        Access Dashboard
+                      </>
+                    )}
+                  </button>
+                )}
               </form>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">

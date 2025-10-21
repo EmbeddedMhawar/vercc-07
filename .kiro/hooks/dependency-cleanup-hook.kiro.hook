@@ -1,0 +1,17 @@
+{
+  "enabled": true,
+  "name": "Dependency Cleanup",
+  "description": "Analyzes main.tsx and all its dependencies recursively, then removes unnecessary files from the project",
+  "version": "1",
+  "when": {
+    "type": "userTriggered",
+    "patterns": [
+      "frontend/src/main.tsx",
+      "frontend-solid/src/main.tsx"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Starting from main.tsx, recursively analyze all dependencies by examining import statements in each file. Build a complete dependency tree by following each import to its source file and analyzing its dependencies. Once you have mapped all used files, identify and remove all unnecessary files that are not part of this dependency chain from the project."
+  }
+}

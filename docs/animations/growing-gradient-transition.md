@@ -1,11 +1,13 @@
 # Growing Gradient Transition Animation
 
 ## Overview
+
 A smooth transition animation where a gradient grows from a clicked button, fills the screen, then shrinks into a card shape on the destination page.
 
 ## Animation Flow
+
 1. **Click button** → Circle grows from button position
-2. **Fills screen** → Full animated gradient background  
+2. **Fills screen** → Full animated gradient background
 3. **Navigate to new page** → Page changes during full screen
 4. **Shrinks to card** → Gradient morphs into target card shape
 5. **Reveals content** → Card content appears
@@ -16,7 +18,7 @@ A smooth transition animation where a gradient grows from a clicked button, fill
 
 ```typescript
 // src/components/GrowingGradientTransition.tsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 interface GrowingGradientTransitionProps {
   isTriggered: boolean;
@@ -25,13 +27,13 @@ interface GrowingGradientTransitionProps {
   targetCardPosition?: { x: number; y: number; width: number; height: number };
 }
 
-export function GrowingGradientTransition({ 
-  isTriggered, 
-  onComplete, 
+export function GrowingGradientTransition({
+  isTriggered,
+  onComplete,
   triggerElement,
-  targetCardPosition 
+  targetCardPosition,
 }: GrowingGradientTransitionProps) {
-  const [phase, setPhase] = useState<'idle' | 'growing' | 'shrinking'>('idle');
+  const [phase, setPhase] = useState<"idle" | "growing" | "shrinking">("idle");
   const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -39,49 +41,49 @@ export function GrowingGradientTransition({
       const rect = triggerElement.getBoundingClientRect();
       setButtonPosition({
         x: rect.left + rect.width / 2,
-        y: rect.top + rect.height / 2
+        y: rect.top + rect.height / 2,
       });
-      
-      setPhase('growing');
-      
+
+      setPhase("growing");
+
       setTimeout(() => {
-        setPhase('shrinking');
+        setPhase("shrinking");
         setTimeout(() => {
           onComplete();
-          setPhase('idle');
+          setPhase("idle");
         }, 800);
       }, 1000);
     }
   }, [isTriggered, triggerElement, onComplete]);
 
-  if (phase === 'idle') return null;
+  if (phase === "idle") return null;
 
   const getTransformStyle = () => {
-    if (phase === 'growing') {
+    if (phase === "growing") {
       return {
         left: buttonPosition.x - 25,
         top: buttonPosition.y - 25,
-        width: '50px',
-        height: '50px',
-        transform: 'scale(100)',
-        borderRadius: '50%'
+        width: "50px",
+        height: "50px",
+        transform: "scale(100)",
+        borderRadius: "50%",
       };
     } else {
       // Shrink to card position and shape
-      const cardPos = targetCardPosition || { 
-        x: window.innerWidth / 2 - 200, 
-        y: window.innerHeight / 2 - 150, 
-        width: 400, 
-        height: 300 
+      const cardPos = targetCardPosition || {
+        x: window.innerWidth / 2 - 200,
+        y: window.innerHeight / 2 - 150,
+        width: 400,
+        height: 300,
       };
-      
+
       return {
         left: cardPos.x,
         top: cardPos.y,
         width: `${cardPos.width}px`,
         height: `${cardPos.height}px`,
-        transform: 'scale(1)',
-        borderRadius: '16px' // Card border radius
+        transform: "scale(1)",
+        borderRadius: "16px", // Card border radius
       };
     }
   };
@@ -92,18 +94,25 @@ export function GrowingGradientTransition({
         className="absolute transition-all duration-1000 ease-out opacity-90"
         style={{
           ...getTransformStyle(),
-          background: 'linear-gradient(135deg, #10b981, #f59e0b, #3b82f6, #8b5cf6)',
-          backgroundSize: '400% 400%',
-          animation: 'gradientShift 3s ease infinite',
-          transformOrigin: 'center'
+          background:
+            "linear-gradient(135deg, #10b981, #f59e0b, #3b82f6, #8b5cf6)",
+          backgroundSize: "400% 400%",
+          animation: "gradientShift 3s ease infinite",
+          transformOrigin: "center",
         }}
       />
-      
+
       <style jsx>{`
         @keyframes gradientShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
         }
       `}</style>
     </div>
@@ -115,8 +124,8 @@ export function GrowingGradientTransition({
 
 ```typescript
 // Add to SigninPage.tsx imports
-import { GrowingGradientTransition } from '../components/GrowingGradientTransition';
-import { useRef } from 'react';
+import { GrowingGradientTransition } from "../components/GrowingGradientTransition";
+import { useRef } from "react";
 
 // Add state variables
 const [showTransition, setShowTransition] = useState(false);
@@ -138,7 +147,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       });
 
       if (error) throw error;
-      
+
       // Trigger the animation
       setShowTransition(true);
     }
@@ -154,7 +163,7 @@ return (
     <InteractiveGradientBackground />
     <main className="relative z-10 min-h-screen flex items-center justify-center p-6">
       {/* ... existing content ... */}
-      
+
       <button
         ref={buttonRef} // Add this ref
         type="submit"
@@ -163,10 +172,10 @@ return (
       >
         {/* ... button content ... */}
       </button>
-      
+
       {/* ... rest of form ... */}
     </main>
-    
+
     {/* Add the transition component */}
     <GrowingGradientTransition
       isTriggered={showTransition}
@@ -185,7 +194,7 @@ return (
 
 ```typescript
 // In DashboardPage.tsx
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect } from "react";
 
 export default function DashboardPage() {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -193,7 +202,7 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen p-6">
       {/* Target card that the animation shrinks into */}
-      <div 
+      <div
         ref={cardRef}
         className="max-w-md mx-auto mt-20 bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-gray-200/50 shadow-2xl"
       >
@@ -208,32 +217,37 @@ export default function DashboardPage() {
 ## Customization Options
 
 ### Timing
+
 - **Growing duration**: Change `1000ms` in setTimeout
 - **Shrinking duration**: Change `800ms` in setTimeout
 - **CSS transition**: Modify `duration-1000` class
 
 ### Gradient Colors
+
 ```typescript
-background: 'linear-gradient(135deg, #10b981, #f59e0b, #3b82f6, #8b5cf6)'
+background: "linear-gradient(135deg, #10b981, #f59e0b, #3b82f6, #8b5cf6)";
 ```
 
 ### Card Dimensions
+
 ```typescript
-const cardPos = { 
-  x: window.innerWidth / 2 - 200, 
-  y: window.innerHeight / 2 - 150, 
-  width: 400, 
-  height: 300 
+const cardPos = {
+  x: window.innerWidth / 2 - 200,
+  y: window.innerHeight / 2 - 150,
+  width: 400,
+  height: 300,
 };
 ```
 
 ### Border Radius
+
 - **Circle**: `borderRadius: '50%'`
 - **Card**: `borderRadius: '16px'`
 
 ## Usage Examples
 
 ### Basic Usage
+
 ```typescript
 <GrowingGradientTransition
   isTriggered={showTransition}
@@ -243,6 +257,7 @@ const cardPos = {
 ```
 
 ### With Custom Card Position
+
 ```typescript
 <GrowingGradientTransition
   isTriggered={showTransition}
@@ -262,6 +277,7 @@ const cardPos = {
 - Cubic bezier easing for smooth transitions
 
 ## Browser Support
+
 - Modern browsers with CSS transforms
 - React 18+ with hooks support
 - Tailwind CSS for styling classes

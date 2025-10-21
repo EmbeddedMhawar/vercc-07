@@ -139,10 +139,10 @@ export default function LandingPage() {
                 financial value of their clean energy.
               </p>
               <a
-                href="#solution"
+                href="/signin"
                 className="inline-block bg-desert-sand text-deep-ocean font-bold px-8 py-4 rounded-lg hover:brightness-105 transition-transform hover:scale-105 shadow-lg shadow-yellow-500/20 animate-glow"
               >
-                Discover Our Solution
+                Become Our Partner
               </a>
             </div>
 
