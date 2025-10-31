@@ -140,9 +140,9 @@ VerifiedCC creates an automated, blockchain-based verification system using Hede
 
 ### Required Submission Components
 
-- **Pitch Deck**: [Link to be added to DoraHacks submission]
-- **Demo Video**: [Link to be added to DoraHacks submission]
-- **Hedera Certification**: [Team member certification links to be provided]
+- **Pitch Deck**: https://docs.google.com/presentation/d/1SPfuurz3AQJLdrrgufROCCMJiRcd84vkkv4JfRuVmIc/edit?usp=sharing
+- **Demo Video**: [still not done the team is tired will do it asap]
+- **Hedera Certification**: https://drive.google.com/file/d/1DByQXGotTqKDCwtkDMTOGhmB3tB1Htls/view?usp=sharing
 
 ## Core API Endpoints
 
