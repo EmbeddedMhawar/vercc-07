@@ -1,6 +1,12 @@
-import { Component, createSignal, onMount, onCleanup, createEffect } from "solid-js";
+import {
+  Component,
+  createSignal,
+  onMount,
+  onCleanup,
+  createEffect,
+} from "solid-js";
 import { useNavigate } from "@solidjs/router";
-import { LogIn, PlayCircle, UserPlus } from "lucide-solid";
+import { LogIn, Play, UserPlus, ArrowLeft } from "lucide-solid";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import { InteractiveElement } from "../components/InteractiveElement";
@@ -14,6 +20,7 @@ const SigninPage: Component = () => {
   const [isSignUp, setIsSignUp] = createSignal(false);
   const [loading, setLoading] = createSignal(false);
   const [error, setError] = createSignal("");
+  const [success, setSuccess] = createSignal("");
 
   // Redirect if already authenticated
   createEffect(() => {
@@ -33,7 +40,6 @@ const SigninPage: Component = () => {
       let curY = 0;
       let tgX = 0;
       let tgY = 0;
-      let animationId: number;
 
       function moveBg() {
         curX += (tgX - curX) / 20;
@@ -41,7 +47,7 @@ const SigninPage: Component = () => {
         interBubble.style.transform = `translate(${Math.round(
           curX
         )}px, ${Math.round(curY)}px)`;
-        animationId = requestAnimationFrame(moveBg);
+        requestAnimationFrame(moveBg);
       }
 
       const handleBgMouseMove = (event: MouseEvent) => {
@@ -54,9 +60,6 @@ const SigninPage: Component = () => {
 
       onCleanup(() => {
         window.removeEventListener("mousemove", handleBgMouseMove);
-        if (animationId) {
-          cancelAnimationFrame(animationId);
-        }
       });
     }
   });
@@ -65,6 +68,7 @@ const SigninPage: Component = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setSuccess("");
 
     try {
       if (isSignUp()) {
@@ -76,10 +80,14 @@ const SigninPage: Component = () => {
 
         if (error) throw error;
 
-        alert(
+        // Show success message and keep user on signup form
+        setSuccess(
           "Registration successful! Please check your email for verification."
         );
-        setIsSignUp(false);
+        setError(""); // Clear any previous errors
+        // Clear the form
+        setEmail("");
+        setPassword("");
       } else {
         // Sign in
         const { error } = await supabase.auth.signInWithPassword({
@@ -158,29 +166,28 @@ const SigninPage: Component = () => {
       </div>
       <main class="min-h-screen relative z-10 flex items-center justify-center p-6">
         <div class="max-w-md mx-auto">
-          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-gray-200/50 shadow-2xl">
-            <div class="text-center mb-6">
-              <img
-                src="/verifiedcc-logo.png"
-                alt="VerifiedCC Logo"
-                class="h-16 w-auto mx-auto mb-4"
-              />
-              <h3 class="text-2xl font-bold text-deep-ocean">
-                {isSignUp() ? "Become Our Partner" : "Become Our Partner"}
-              </h3>
-              <p class="text-gray-600 mt-2">
-                {isSignUp()
-                  ? "Partner Registration"
-                  : "Access Guardian Verifiable Credentials Portal"}
-              </p>
-              {error() && (
-                <div class="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
-                  {error()}
-                </div>
-              )}
-            </div>
+          {/* Signin Card */}
+          {!isSignUp() && (
+            <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-gray-200/50 shadow-2xl">
+              <div class="text-center mb-6">
+                <img
+                  src="/verifiedcc-logo.png"
+                  alt="VerifiedCC Logo"
+                  class="h-16 w-auto mx-auto mb-4 transition-transform hover:scale-110"
+                />
+                <h3 class="text-2xl font-bold text-deep-ocean">
+                  Become Our Partner
+                </h3>
+                <p class="text-gray-600 mt-2">
+                  Access your verified carbon credit dashboard
+                </p>
+                {error() && (
+                  <div class="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
+                    {error()}
+                  </div>
+                )}
+              </div>
 
-            {!isSignUp() ? (
               <form onSubmit={handleSubmit} class="space-y-6">
                 <div>
                   <label
@@ -216,14 +223,9 @@ const SigninPage: Component = () => {
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oasis-green focus:border-transparent transition-colors bg-white/50"
                     placeholder="••••••••"
                   />
-                  <p class="text-xs text-gray-500 mt-1">
-                    Demo credentials:{" "}
-                    <code class="bg-gray-100 px-1 rounded">demo@gmail.com</code>{" "}
-                    / <code class="bg-gray-100 px-1 rounded">verifiedcc</code>
-                  </p>
                 </div>
 
-                {email() && password() ? (
+                {email().trim() && password().trim() ? (
                   <InteractiveElement
                     as="button"
                     size="small"
@@ -231,6 +233,7 @@ const SigninPage: Component = () => {
                     type="submit"
                     disabled={loading()}
                     class="w-full text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                    style="background: transparent !important;"
                   >
                     {loading() ? (
                       <div class="flex items-center justify-center">
@@ -264,7 +267,86 @@ const SigninPage: Component = () => {
                   </button>
                 )}
               </form>
-            ) : (
+
+              <div class="mt-4">
+                <div class="relative">
+                  <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-300"></div>
+                  </div>
+                  <div class="relative flex justify-center text-sm">
+                    <span class="px-2 bg-white/80 text-gray-500">Or</span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleDemoLogin}
+                  disabled={loading()}
+                  class="w-full mt-4 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                >
+                  {loading() ? (
+                    <div class="flex items-center justify-center">
+                      <BouncyDotsLoader size="sm" className="mr-2" />
+                      Loading Demo...
+                    </div>
+                  ) : (
+                    <>
+                      <Play size={20} class="inline mr-2" />
+                      Try Demo Account
+                    </>
+                  )}
+                </button>
+              </div>
+
+              <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">
+                  New partner?{" "}
+                  <button
+                    type="button"
+                    onClick={() => setIsSignUp(true)}
+                    class="text-oasis-green hover:text-green-700 font-medium underline"
+                  >
+                    Sign up for partnership
+                  </button>
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Signup Card */}
+          {isSignUp() && (
+            <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-gray-200/50 shadow-2xl relative">
+              <div class="text-center mb-6">
+                <button
+                  type="button"
+                  onClick={() => setIsSignUp(false)}
+                  class="absolute top-4 left-4 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg border border-gray-200 text-deep-ocean hover:text-oasis-green hover:bg-gray-50 transition-all duration-200 z-30"
+                  title="Back to Sign In"
+                >
+                  <ArrowLeft size={20} />
+                </button>
+                <img
+                  src="/verifiedcc-logo.png"
+                  alt="VerifiedCC Logo"
+                  class="h-16 w-auto mx-auto mb-4 transition-transform hover:scale-110"
+                />
+                <h3 class="text-2xl font-bold text-deep-ocean">
+                  Become Our Partner
+                </h3>
+                <p class="text-gray-600 mt-2">
+                  Create your verifiable carbon credit dashboard
+                </p>
+                {error() && (
+                  <div class="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
+                    {error()}
+                  </div>
+                )}
+                {success() && (
+                  <div class="mt-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg text-sm">
+                    {success()}
+                  </div>
+                )}
+              </div>
               <form onSubmit={handleSubmit} class="space-y-6">
                 <div>
                   <label
@@ -302,11 +384,33 @@ const SigninPage: Component = () => {
                   />
                 </div>
 
-                <div class="flex gap-3">
+                {email().trim() && password().trim() ? (
+                  <InteractiveElement
+                    as="button"
+                    size="small"
+                    backgroundStyle="full"
+                    type="submit"
+                    disabled={loading()}
+                    class="w-full text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                    style="background: transparent !important;"
+                  >
+                    {loading() ? (
+                      <div class="flex items-center justify-center">
+                        <BouncyDotsLoader size="sm" className="mr-2" />
+                        Creating Account...
+                      </div>
+                    ) : (
+                      <>
+                        <UserPlus size={20} class="inline mr-2" />
+                        Create Account
+                      </>
+                    )}
+                  </InteractiveElement>
+                ) : (
                   <button
                     type="submit"
                     disabled={loading()}
-                    class="flex-1 bg-oasis-green hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                    class="w-full text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none bg-gray-400"
                   >
                     {loading() ? (
                       <div class="flex items-center justify-center">
@@ -320,62 +424,23 @@ const SigninPage: Component = () => {
                       </>
                     )}
                   </button>
+                )}
+              </form>
+
+              <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">
+                  Already have an account?{" "}
                   <button
                     type="button"
                     onClick={() => setIsSignUp(false)}
-                    class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300"
+                    class="text-oasis-green hover:text-green-700 font-medium underline"
                   >
-                    Cancel
+                    Sign in here
                   </button>
-                </div>
-              </form>
-            )}
-
-            {!isSignUp() && (
-              <div class="mt-4">
-                <div class="relative">
-                  <div class="absolute inset-0 flex items-center">
-                    <div class="w-full border-t border-gray-300"></div>
-                  </div>
-                  <div class="relative flex justify-center text-sm">
-                    <span class="px-2 bg-white/80 text-gray-500">Or</span>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={handleDemoLogin}
-                  disabled={loading()}
-                  class="w-full mt-4 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                >
-                  {loading() ? (
-                    <div class="flex items-center justify-center">
-                      <BouncyDotsLoader size="sm" className="mr-2" />
-                      Loading Demo...
-                    </div>
-                  ) : (
-                    <>
-                      <PlayCircle size={20} class="inline mr-2" />
-                      Try Demo Account
-                    </>
-                  )}
-                </button>
+                </p>
               </div>
-            )}
-
-            <div class="mt-6 text-center">
-              <p class="text-sm text-gray-600">
-                {isSignUp() ? "Already have an account?" : "New partner?"}{" "}
-                <button
-                  type="button"
-                  onClick={() => setIsSignUp(!isSignUp())}
-                  class="text-oasis-green hover:text-green-700 font-medium underline"
-                >
-                  {isSignUp() ? "Sign in here" : "Sign up for partnership"}
-                </button>
-              </p>
             </div>
-          </div>
+          )}
         </div>
       </main>
     </>

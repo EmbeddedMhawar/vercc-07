@@ -442,6 +442,18 @@
 }
 
 /* Interactive Element Styles */
+.interactive-element-minimal .interactive-gradient-container-small {
+  filter: blur(20px);
+}
+
+.interactive-element-minimal .interactive-gradient-container-large {
+  filter: blur(40px);
+}
+
+.interactive-element-full .interactive-gradient-container-full {
+  filter: blur(40px);
+}
+
 .interactive-gradient-container-small {
   filter: blur(20px);
 }
@@ -742,25 +754,37 @@
 
 .gradient-bg .g5 {
   position: absolute;
-  background: radial-gradient(circle at center, rgba(253, 184, 19, 0.4) 0, rgba(253, 184, 19, 0) 50%) no-repeat;
-  mix-blend-mode: hard-light;
+  background: radial-gradient(circle at center, rgba(248, 250, 252, 0.1) 0, rgba(248, 250, 252, 0) 50%) no-repeat;
+  mix-blend-mode: soft-light;
   width: calc(80% * 2);
   height: calc(80% * 2);
   top: calc(50% - 80%);
   left: calc(50% - 80%);
   transform-origin: calc(50% - 800px) calc(50% + 200px);
+  opacity: 0.05;
+  transition: all 0.8s ease;
+}
+
+.gradient-bg .g5.animate {
+  background: radial-gradient(circle at center, rgba(253, 184, 19, 0.4) 0, rgba(253, 184, 19, 0) 50%) no-repeat;
   animation: moveInCircle 20s ease infinite;
   opacity: 1;
 }
 
 .gradient-bg .interactive {
   position: absolute;
-  background: radial-gradient(circle at center, rgba(46, 133, 64, 0.6) 0, rgba(46, 133, 64, 0) 50%) no-repeat;
-  mix-blend-mode: hard-light;
+  background: radial-gradient(circle at center, rgba(241, 245, 249, 0.1) 0, rgba(241, 245, 249, 0) 50%) no-repeat;
+  mix-blend-mode: soft-light;
   width: 100%;
   height: 100%;
   top: -50%;
   left: -50%;
+  opacity: 0;
+  transition: all 0.8s ease;
+}
+
+.gradient-bg .interactive.active {
+  background: radial-gradient(circle at center, rgba(46, 133, 64, 0.6) 0, rgba(46, 133, 64, 0) 50%) no-repeat;
   opacity: 0.7;
 }
 
@@ -864,9 +888,14 @@
   border-radius: 50%;
   pointer-events: none;
   z-index: 100;
-  transition: transform 0.1s ease-out;
+  transition: transform 0.1s ease-out, opacity 0.5s ease;
   filter: blur(20px);
   mix-blend-mode: hard-light;
+  opacity: 0;
+}
+
+.signin-interactive.active {
+  opacity: 1;
 }
 
 /* Dashboard Interactive Background - More Subtle */
@@ -1622,3 +1651,7 @@ y Noisy Desert Yellow Dots Loading Animation */
   80% { top: 0.3px; transform: rotate(-0.8deg) scale(0.98); }
   100% { top: -0.1px; transform: rotate(0deg) scale(1); }
 }
+
+
+
+

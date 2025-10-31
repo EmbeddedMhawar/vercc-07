@@ -14,8 +14,11 @@ import {
   FileText,
   X,
   Wifi,
+  User,
 } from "lucide-solid";
 import { supabase } from "../lib/supabase";
+import AMSIDForm from "../components/AMSIDForm";
+import ParticipantRegistration from "../components/ParticipantRegistration";
 
 const DashboardPage: Component = () => {
   // Convert React useState to SolidJS createSignal
@@ -36,14 +39,8 @@ const DashboardPage: Component = () => {
   const [showSensorModal, setShowSensorModal] = createSignal(false);
   const [showSettingsDropdown, setShowSettingsDropdown] = createSignal(false);
   const [documentData, setDocumentData] = createSignal<any>(null);
-  const [formData, setFormData] = createSignal({
-    deviceId: "",
-    location: "",
-    energySource: "Solar Panel",
-    capacity: "",
-    installationDate: "",
-    certification: "",
-  });
+  const [isSubmitting, setIsSubmitting] = createSignal(false);
+  const [showParticipantRegistration, setShowParticipantRegistration] = createSignal(false);
 
   // Convert React useEffect to SolidJS onMount
   onMount(() => {
@@ -135,12 +132,15 @@ const DashboardPage: Component = () => {
     alert(message);
   };
 
-  const handleDocumentSubmit = (e: Event) => {
-    e.preventDefault();
-    setDocumentData(formData());
-    setFormFilled(true);
-    setShowDocumentModal(false);
-    showNotification("Document submitted successfully!", "success");
+  const handleDocumentSubmit = () => {
+    setIsSubmitting(true);
+    // Simulate API call
+    setTimeout(() => {
+      setFormFilled(true);
+      setShowDocumentModal(false);
+      setIsSubmitting(false);
+      showNotification("AMS-I.D Document submitted successfully!", "success");
+    }, 2000);
   };
 
   const handleSensorConnect = () => {
@@ -169,26 +169,7 @@ const DashboardPage: Component = () => {
       setIsConnected(false);
       setIsStreamActive(false);
       setDocumentData(null);
-      setFormData({
-        deviceId: "",
-        location: "",
-        energySource: "Solar Panel",
-        capacity: "",
-        installationDate: "",
-        certification: "",
-      });
     }
-  };
-
-  const handleDemoFillDocument = () => {
-    setFormData({
-      deviceId: "ESP32-SOLAR-001",
-      location: "Morocco, Casablanca",
-      energySource: "Solar Panel",
-      capacity: "1.5",
-      installationDate: "2024-01-15",
-      certification: "IEC 61215, IEC 61730",
-    });
   };
 
   const handleDemoConnectSensor = () => {
@@ -217,14 +198,6 @@ const DashboardPage: Component = () => {
       setIsStreamActive(false);
       setTotalCredits(0);
       setDocumentData(null);
-      setFormData({
-        deviceId: "",
-        location: "",
-        energySource: "Solar Panel",
-        capacity: "",
-        installationDate: "",
-        certification: "",
-      });
 
       // AuthContext will handle navigation to signin page
     } catch (error) {
@@ -413,10 +386,6 @@ const DashboardPage: Component = () => {
 
                       {/* Logout */}
                       <div class="py-1">
-
-
-
-
                         {/* Logout */}
                         <div
                           onClick={(e) => {
@@ -522,7 +491,7 @@ const DashboardPage: Component = () => {
 
             {/* Action Cards Section */}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              {/* Card 1 - Fill Document */}
+              {/* Card 1 - Fill AMS-I.D Document */}
               <div class="action-card">
                 <div class="flex items-center mb-4">
                   <div
@@ -536,24 +505,26 @@ const DashboardPage: Component = () => {
                   </div>
                   <div>
                     <h3 class="text-xl font-bold text-deep-ocean">
-                      Fill Document
+                      Fill AMS-I.D Document
                     </h3>
                     <p class="text-gray-600 text-sm">
-                      Complete device registration
+                      Complete project registration
                     </p>
                   </div>
                 </div>
                 <p class="text-gray-600 mb-4">
-                  Fill in the Guardian VC document with your device information
-                  and specifications.
+                  Register project participants for Guardian carbon credit platform.
                 </p>
-                <button
-                  onClick={() => setShowDocumentModal(true)}
-                  class={`action-card-button ${getDocumentButtonClass()}`}
-                  disabled={formFilled()}
-                >
-                  {formFilled() ? "Document Completed ✓" : "Fill Document"}
-                </button>
+                <div class="space-y-3">
+                  <button
+                    onClick={() => setShowParticipantRegistration(true)}
+                    class="w-full text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center hover:opacity-80"
+                    style={{ "background-color": "#003F5C" }}
+                  >
+                    <User class="w-5 h-5 mr-2" />
+                    Register Participant
+                  </button>
+                </div>
               </div>
 
               {/* Card 2 - Connect Sensor */}
@@ -634,183 +605,39 @@ const DashboardPage: Component = () => {
           </div>
         </main>
 
-        {/* Document Modal */}
+        {/* AMS-I.D Document Modal */}
         <Show when={showDocumentModal()}>
           <div
             class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
             onClick={() => setShowDocumentModal(false)}
           >
-            <div
-              class="bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-gray-200/50 shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Header */}
-              <div class="flex items-center justify-between mb-6">
-                <div class="flex items-center">
-                  <div class="bg-deep-ocean text-white rounded-lg h-12 w-12 flex items-center justify-center mr-4 shadow-lg">
-                    <FileText size={24} />
-                  </div>
-                  <div>
-                    <h2 class="text-2xl font-bold text-deep-ocean">
-                      Guardian VC Document
-                    </h2>
-                    <p class="text-gray-600">
-                      Fill in Verifiable Credentials Document
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setShowDocumentModal(false)}
-                  class="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <X class="w-6 h-6 text-gray-500" />
-                </button>
-              </div>
+            <div onClick={(e) => e.stopPropagation()}>
+              <AMSIDForm
+                onSubmit={(data) => {
+                  setDocumentData(data);
+                  handleDocumentSubmit();
+                }}
+                onCancel={() => setShowDocumentModal(false)}
+                isSubmitting={isSubmitting()}
+              />
+            </div>
+          </div>
+        </Show>
 
-              {/* Demo Fill Button */}
-              <div class="mb-6">
-                <button
-                  type="button"
-                  onClick={handleDemoFillDocument}
-                  class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center"
-                >
-                  <Zap class="w-4 h-4 mr-2" />
-                  Demo Auto-Fill
-                </button>
-              </div>
-
-              {/* Form */}
-              <form onSubmit={handleDocumentSubmit} class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label class="block text-sm font-medium text-deep-ocean mb-2">
-                      Device ID *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData().deviceId}
-                      onInput={(e) =>
-                        setFormData({
-                          ...formData(),
-                          deviceId: e.currentTarget.value,
-                        })
-                      }
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oasis-green focus:border-transparent transition-colors bg-white/50"
-                      placeholder="ESP32-SOLAR-001"
-                    />
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-deep-ocean mb-2">
-                      Location *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData().location}
-                      onInput={(e) =>
-                        setFormData({
-                          ...formData(),
-                          location: e.currentTarget.value,
-                        })
-                      }
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oasis-green focus:border-transparent transition-colors bg-white/50"
-                      placeholder="Morocco, Casablanca"
-                    />
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-deep-ocean mb-2">
-                      Energy Source *
-                    </label>
-                    <select
-                      required
-                      value={formData().energySource}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData(),
-                          energySource: e.currentTarget.value,
-                        })
-                      }
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oasis-green focus:border-transparent transition-colors bg-white/50"
-                    >
-                      <option value="Solar Panel">Solar Panel</option>
-                      <option value="Wind Turbine">Wind Turbine</option>
-                      <option value="Hydro">Hydro</option>
-                      <option value="Biomass">Biomass</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-deep-ocean mb-2">
-                      Capacity (kW) *
-                    </label>
-                    <input
-                      type="number"
-                      step="0.1"
-                      required
-                      value={formData().capacity}
-                      onInput={(e) =>
-                        setFormData({
-                          ...formData(),
-                          capacity: e.currentTarget.value,
-                        })
-                      }
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oasis-green focus:border-transparent transition-colors bg-white/50"
-                      placeholder="1.5"
-                    />
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-deep-ocean mb-2">
-                      Installation Date *
-                    </label>
-                    <input
-                      type="date"
-                      required
-                      value={formData().installationDate}
-                      onInput={(e) =>
-                        setFormData({
-                          ...formData(),
-                          installationDate: e.currentTarget.value,
-                        })
-                      }
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oasis-green focus:border-transparent transition-colors bg-white/50"
-                    />
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-deep-ocean mb-2">
-                      Certification
-                    </label>
-                    <input
-                      type="text"
-                      value={formData().certification}
-                      onInput={(e) =>
-                        setFormData({
-                          ...formData(),
-                          certification: e.currentTarget.value,
-                        })
-                      }
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-oasis-green focus:border-transparent transition-colors bg-white/50"
-                      placeholder="IEC 61215, IEC 61730"
-                    />
-                  </div>
-                </div>
-
-                {/* Submit Button */}
-                <div class="flex justify-end space-x-4 pt-6">
-                  <button
-                    type="button"
-                    onClick={() => setShowDocumentModal(false)}
-                    class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    class="bg-desert-sand hover:bg-yellow-500 text-white font-bold px-8 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
-                  >
-                    Submit Document
-                  </button>
-                </div>
-              </form>
+        {/* Participant Registration Modal */}
+        <Show when={showParticipantRegistration()}>
+          <div
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+            onClick={() => setShowParticipantRegistration(false)}
+          >
+            <div onClick={(e) => e.stopPropagation()}>
+              <ParticipantRegistration
+                onSuccess={(participantId, did) => {
+                  console.log("Participant registered:", participantId, did);
+                  // Could add success notification here
+                }}
+                onCancel={() => setShowParticipantRegistration(false)}
+              />
             </div>
           </div>
         </Show>
@@ -858,7 +685,7 @@ const DashboardPage: Component = () => {
                     <li>
                       Configure your ESP32 or SCADA system with our API endpoint
                     </li>
-                    <li>Use the provided device ID from your document</li>
+                    <li>Use the provided device ID from your AMS-I.D document</li>
                     <li>
                       Set up data transmission interval (recommended: 1 minute)
                     </li>
@@ -876,8 +703,8 @@ const DashboardPage: Component = () => {
                       https://api.verifiedcc.com/data
                     </div>
                     <div class="mb-1">
-                      <span class="font-semibold">Device ID:</span>{" "}
-                      {documentData()?.deviceId || "Fill document first"}
+                      <span class="font-semibold">Project ID:</span>{" "}
+                      {documentData()?.organizationName || "Complete document first"}
                     </div>
                     <div>
                       <span class="font-semibold">Method:</span> POST
@@ -891,7 +718,7 @@ const DashboardPage: Component = () => {
                   </h4>
                   <pre class="text-xs text-green-800 bg-green-100 p-3 rounded border overflow-x-auto">
                     {`{
-  "deviceId": "${documentData()?.deviceId || "ESP32-SOLAR-001"}",
+  "projectId": "${documentData()?.organizationName || "Green-Energy-Morocco"}",
   "timestamp": "2024-01-15T10:30:00Z",
   "power": 1250.5,
   "energy": 8.75,
